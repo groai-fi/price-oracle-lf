@@ -1,0 +1,23 @@
+[project]
+name = "price-oracle-lf"
+version = "0.1.0"
+description = "Periodic market data service — incremental Binance OHLCV pulls to S3"
+requires-python = ">=3.11"
+dependencies = [
+    "groai-fi-datastore-shared>=0.2.2",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"

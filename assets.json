@@ -1,0 +1,4 @@
+[
+  { "exchange": "Binance", "symbol": "BTCUSDT", "start_date": "2019/01/01" },
+  { "exchange": "Binance", "symbol": "ETHUSDT", "start_date": "2019/01/01" }
+]
