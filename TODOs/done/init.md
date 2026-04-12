@@ -46,10 +46,10 @@ extensible to other exchanges in the future.
 Required by `groai-fi-datastore-shared` and the Railway BUCKET:
 
 ```
-S3_ENDPOINT_URL
-S3_BUCKET_NAME
-S3_ACCESS_KEY_ID
-S3_SECRET_ACCESS_KEY
+BUCKET_ENDPOINT
+BUCKET_NAME
+BUCKET_ACCESS_KEY_ID
+BUCKET_SECRET_ACCESS_KEY
 BINANCE_API_KEY
 BINANCE_API_SECRET
 ```

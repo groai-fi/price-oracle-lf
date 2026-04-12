@@ -1,10 +1,10 @@
 [project]
 name = "price-oracle-lf"
-version = "0.1.0"
+version = "0.1.1"
 description = "Periodic market data service — incremental Binance OHLCV pulls to S3"
 requires-python = ">=3.11"
 dependencies = [
-    "groai-fi-datastore-shared>=0.2.2",
+    "groai-fi-datastore-shared>=0.2.3",
     "python-dotenv>=1.0.0",
 ]
 

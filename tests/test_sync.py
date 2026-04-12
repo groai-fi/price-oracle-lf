@@ -33,7 +33,7 @@ def assets_file(tmp_path):
 
 @pytest.fixture(autouse=True)
 def set_bucket_env(monkeypatch):
-    monkeypatch.setenv("S3_BUCKET_NAME", MOCK_BUCKET)
+    monkeypatch.setenv("BUCKET_NAME", MOCK_BUCKET)
 
 
 # ── New-symbol path ───────────────────────────────────────────────────────────
