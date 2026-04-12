@@ -49,7 +49,7 @@ def run_sync(assets_path: str = "assets.json") -> Dict[str, int]:
     Returns:
         dict with keys: "success", "failed", "new_rows"
     """
-    bucket = os.environ["S3_BUCKET_NAME"]
+    bucket = os.environ["BUCKET_NAME"]
     assets = load_assets(assets_path)
 
     total_new_rows = 0
