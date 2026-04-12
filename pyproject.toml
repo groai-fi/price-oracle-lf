@@ -1,6 +1,6 @@
 [project]
 name = "price-oracle-lf"
-version = "0.1.1"
+version = "0.1.2"
 description = "Periodic market data service — incremental Binance OHLCV pulls to S3"
 requires-python = ">=3.11"
 dependencies = [
