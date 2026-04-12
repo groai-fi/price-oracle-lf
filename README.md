@@ -96,3 +96,31 @@ print(resampled_df)
 
 con.close()
 ```
+
+### Parquet Schema
+
+When checking the dataset, you'll encounter the following schema:
+
+| Column | Type | Nullable | Description |
+| :--- | :--- | :--- | :--- |
+| `date` | `TIMESTAMP WITH TIME ZONE` | YES | The candle open time in UTC |
+| `yymm` | `VARCHAR` | YES | Year-month partitioning key (e.g., '2604') |
+| `exchange` | `VARCHAR` | YES | Partitioning key for the exchange (e.g., 'Binance') |
+| `symbol` | `VARCHAR` | YES | Partitioning key for the asset symbol (e.g., 'BTCUSDT') |
+| `open` | `DOUBLE` | YES | Opening price for the candle |
+| `high` | `DOUBLE` | YES | Highest price during the candle |
+| `low` | `DOUBLE` | YES | Lowest price during the candle |
+| `close` | `DOUBLE` | YES | Closing price for the candle |
+| `volume` | `DOUBLE` | YES | Trading volume during the candle |
+
+### Read Example Result (10m Resampled DataFrame)
+
+Using the example query above returns a Pandas DataFrame matching this structure:
+
+| bucket_time | open | high | low | close | volume |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-04-12 00:00:00 | 73043.16 | 73043.17 | 72939.03 | 72946.90 | 81.35 |
+| 2026-04-11 23:50:00 | 73062.00 | 73067.73 | 73009.45 | 73043.16 | 62.93 |
+| 2026-04-11 23:40:00 | 73133.96 | 73133.96 | 73060.31 | 73062.00 | 36.31 |
+| 2026-04-11 23:30:00 | 73136.00 | 73176.40 | 73082.20 | 73133.96 | 70.79 |
+| 2026-04-11 23:20:00 | 73123.64 | 73210.00 | 73123.64 | 73136.00 | 33.57 |
