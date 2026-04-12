@@ -36,3 +36,63 @@ Triggered natively by a Railway cron job (defaulting to every 8 hours).
    ```bash
    python main.py
    ```
+
+## Data Usage Example (Python & DuckDB)
+
+With `groai-fi-datastore-shared>=0.2.2`, you can easily interact with the Parquet data directly from the S3 bucket using the built-in DuckDB integration. Railway provides `BUCKET_` environment variables which need to be mapped to the `S3_` variables expected by the library.
+
+Here is a Python example that connects directly to S3 and resamples the 1m OHLCV data to 10m intervals:
+
+```python
+import os
+import duckdb
+from dotenv import load_dotenv
+from groai_fi_datastore_shared.Binance.cli.s3_utils import configure_duckdb_s3
+
+# 1. Load credentials from your Railway environment equivalent
+load_dotenv(".env.railway.production")
+
+# 2. Map Railway's BUCKET_ vars to the S3_ vars expected by the library
+os.environ["S3_ENDPOINT_URL"] = os.environ.get("BUCKET_ENDPOINT", "")
+os.environ["S3_BUCKET_NAME"] = os.environ.get("BUCKET_NAME", "")
+os.environ["S3_ACCESS_KEY_ID"] = os.environ.get("BUCKET_ACCESS_KEY_ID", "")
+os.environ["S3_SECRET_ACCESS_KEY"] = os.environ.get("BUCKET_SECRET_ACCESS_KEY", "")
+
+# 3. Initialize DuckDB and automatically configure HTTPFS + S3 keys
+con = duckdb.connect()
+configure_duckdb_s3(con)
+
+# 4. Query and resample 1m data to 10m candles (e.g. BTCUSDT)
+bucket = os.environ["S3_BUCKET_NAME"]
+path = f"s3://{bucket}/prices_v3.parquet/exchange=Binance/symbol=BTCUSDT/**/*.parquet"
+
+query = f"""
+    WITH base AS (
+        SELECT *
+        FROM read_parquet('{path}', hive_partitioning=true)
+        ORDER BY date
+    ),
+    bucketed AS (
+        SELECT
+            epoch_ms((epoch_ms(date) // 600000) * 600000) AS bucket_time,
+            open, high, low, close, volume
+        FROM base
+    )
+    SELECT
+        bucket_time,
+        first(open  ORDER BY bucket_time) AS open,
+        max(high)                         AS high,
+        min(low)                          AS low,
+        last(close  ORDER BY bucket_time) AS close,
+        sum(volume)                       AS volume
+    FROM bucketed
+    GROUP BY bucket_time
+    ORDER BY bucket_time DESC
+    LIMIT 5
+"""
+
+resampled_df = con.execute(query).df()
+print(resampled_df)
+
+con.close()
+```
