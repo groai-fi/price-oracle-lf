@@ -6,15 +6,15 @@ WORKDIR /app
 # as its build backend, which plain pip cannot bootstrap.
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Install dependencies declared in pyproject.toml.
-# price-oracle-lf is a service (not a library), so we install deps directly
-# rather than building a wheel.
-COPY pyproject.toml .
-RUN uv pip install --system --no-cache \
-    "groai-fi-datastore-shared>=0.2.4" \
-    "python-dotenv>=1.0.0"
+# Copy pyproject.toml and uv.lock to guarantee exact versions
+COPY pyproject.toml uv.lock ./
 
-# Copy source after deps are cached
+# Install dependencies using exact locked versions. 
+# This automatically creates a virtual environment (.venv) inside the container.
+RUN uv sync --locked --no-dev --no-cache
+
+# Copy the rest of the source code
 COPY . .
 
-CMD ["python", "main.py"]
+# Run via uv run, which seamlessly routes execution through the .venv created above
+CMD ["uv", "run", "main.py"]
