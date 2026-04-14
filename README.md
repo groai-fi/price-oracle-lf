@@ -39,7 +39,7 @@ Triggered natively by a Railway cron job (defaulting to every 8 hours).
 
 ## Data Usage Example (Python & DuckDB)
 
-With `groai-fi-datastore-shared>=0.2.2`, you can easily interact with the Parquet data directly from the S3 bucket using the built-in DuckDB integration. Railway provides `BUCKET_` environment variables which need to be mapped to the `S3_` variables expected by the library.
+With `groai-fi-datastore-shared>=0.2.4`, you can easily interact with the Parquet data directly from the S3 bucket using the built-in DuckDB integration. Railway provides `BUCKET_` environment variables which need to be mapped to the `S3_` variables expected by the library.
 
 Here is a Python example that connects directly to S3 and resamples the 1m OHLCV data to 10m intervals:
 
