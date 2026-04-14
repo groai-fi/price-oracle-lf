@@ -11,6 +11,8 @@ Exit codes:
 """
 import logging
 import sys
+import tomllib
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -25,12 +27,23 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
+def get_version() -> str:
+    try:
+        pyproject_path = Path(__file__).parent / "pyproject.toml"
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+            return data.get("project", {}).get("version", "unknown")
+    except Exception:
+        return "unknown"
+
+
 def main() -> None:
     # load_dotenv is a no-op on Railway (vars already injected);
     # useful for local development with a .env file.
     load_dotenv()
 
-    log.info("price-oracle-lf: sync starting")
+    version = get_version()
+    log.info(f"price-oracle-lf v{version}: sync starting")
 
     try:
         result = run_sync()
