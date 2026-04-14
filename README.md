@@ -101,17 +101,17 @@ con.close()
 
 When checking the dataset, you'll encounter the following schema:
 
-| Column | Type | Nullable | Description |
-| :--- | :--- | :--- | :--- |
-| `date` | `TIMESTAMP WITH TIME ZONE` | YES | The candle open time in UTC |
-| `yymm` | `VARCHAR` | YES | Year-month partitioning key (e.g., '2604') |
-| `exchange` | `VARCHAR` | YES | Partitioning key for the exchange (e.g., 'Binance') |
-| `symbol` | `VARCHAR` | YES | Partitioning key for the asset symbol (e.g., 'BTCUSDT') |
-| `open` | `DOUBLE` | YES | Opening price for the candle |
-| `high` | `DOUBLE` | YES | Highest price during the candle |
-| `low` | `DOUBLE` | YES | Lowest price during the candle |
-| `close` | `DOUBLE` | YES | Closing price for the candle |
-| `volume` | `DOUBLE` | YES | Trading volume during the candle |
+| Column | Type | Nullable | Description | Location |
+| :--- | :--- | :--- | :--- | :--- |
+| `exchange` | `VARCHAR` | YES | Partitioning key for the exchange (e.g., 'Binance') | **Hive Partition (S3 Path Only)** |
+| `symbol` | `VARCHAR` | YES | Partitioning key for the asset symbol (e.g., 'BTCUSDT') | **Hive Partition (S3 Path Only)** |
+| `date` | `TIMESTAMP WITH TIME ZONE` | YES | The candle open time in UTC (Parquet Index) | **Inside File** |
+| `yymm` | `VARCHAR` | YES | Year-month partitioning key (e.g., '2604') (Dict-encoded) | **Inside File** |
+| `open` | `DOUBLE` | YES | Opening price for the candle | **Inside File** |
+| `high` | `DOUBLE` | YES | Highest price during the candle | **Inside File** |
+| `low` | `DOUBLE` | YES | Lowest price during the candle | **Inside File** |
+| `close` | `DOUBLE` | YES | Closing price for the candle | **Inside File** |
+| `volume` | `DOUBLE` | YES | Trading volume during the candle | **Inside File** |
 
 ### Read Example Result (10m Resampled DataFrame)
 
