@@ -13,6 +13,9 @@ COPY pyproject.toml uv.lock ./
 # This automatically creates a virtual environment (.venv) inside the container.
 RUN uv sync --locked --no-dev --no-cache
 
+# Ensure the virtual environment is used for all python commands
+ENV PATH="/app/.venv/bin:$PATH"
+
 # Copy the rest of the source code
 COPY . .
 
